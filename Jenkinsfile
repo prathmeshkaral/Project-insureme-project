@@ -5,37 +5,39 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
+        stage('git-checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/abhipraydhoble/Project-InsureMe.git'
             }
         }
-
-        stage('Code-Build') {
+        
+        stage('code-build') {
             steps {
                 sh 'mvn clean package'
             }
         }
         
+        
         stage('Docker-Build') {
             steps {
-                sh 'docker build -t guru6910/project:p1 .'
+                sh 'docker build -t prathmesh72/insure-me:i1 .'
             }
         }
         
         stage('Docker-Push') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker_id', passwordVariable: 'passwd', usernameVariable: 'uname')]) {
-                    sh "docker login -u ${env.uname} -p ${env.passwd}"
-                    sh 'docker push guru6910/project:p1'
+                withCredentials([usernamePassword(credentialsId: 'docker_id', passwordVariable: 'passwd123', usernameVariable: 'firstname')]) {
+                    sh "docker login -u ${env.firstname} -p ${env.passwd123}"
+                    sh 'docker push prathmesh72/insure-me:i1'
                 }
             }
         }
         
         stage('Code-Deploy') {
-        steps {
-           sh 'docker run -d -p 8089:8081 guru6910/project:p1'
+            steps {
+                sh 'docker run -d -p 8089:8081 prathmesh72/insure-me:i1'
+            }
         }
-      }
+        
     }
 }
